@@ -259,7 +259,7 @@ void Markers::newMarkersAvailable()
   {
     std::vector<int32_t> expired;
     for(auto m: ns.second)
-      if(!m.second->marker.header.stamp.isZero() && !m.second->marker.lifetime.isZero()&& m.second->marker.header.stamp + m.second->marker.lifetime < now)
+      if(!m.second || (!m.second->marker.header.stamp.isZero() && !m.second->marker.lifetime.isZero()&& m.second->marker.header.stamp + m.second->marker.lifetime < now))
         expired.push_back(m.first);
     for(auto e: expired)
     {
