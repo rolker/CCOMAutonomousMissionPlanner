@@ -9,8 +9,12 @@ GeovizDisplay::GeovizDisplay(QWidget* parent, QGraphicsItem *parentItem):QWidget
 
 void GeovizDisplay::updateRobotNamespace(QString robotNamespace)
 {
-  ros::NodeHandle nh;
-  m_display_subscriber = nh.subscribe("/"+robotNamespace.toStdString()+"/project11/display", 10, &GeovizDisplay::geoVizDisplayCallback, this);
+  if(robotNamespace != robot_namespace_)
+  {
+    ros::NodeHandle nh;
+    m_display_subscriber = nh.subscribe("/"+robotNamespace.toStdString()+"/project11/display", 10, &GeovizDisplay::geoVizDisplayCallback, this);
+    robot_namespace_ = robotNamespace;
+  }
 }
 
 QRectF GeovizDisplay::boundingRect() const

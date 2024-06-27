@@ -69,6 +69,8 @@ private:
   ros::Subscriber m_display_subscriber;
 
   std::map<std::string,std::shared_ptr<geoviz::Item> > m_display_items;
+
+  QString robot_namespace_;
 };
 
 #endif

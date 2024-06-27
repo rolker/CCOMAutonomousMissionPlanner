@@ -16,11 +16,15 @@ MissionManager::~MissionManager()
 
 void MissionManager::updateRobotNamespace(QString robot_namespace)
 {
-  ros::NodeHandle nh;
-  m_mission_status_subscriber = nh.subscribe("/"+robot_namespace.toStdString()+"/project11/status/mission_manager" , 1, &MissionManager::missionStatusCallback, this);
-  m_send_command_publisher = nh.advertise<std_msgs::String>("/"+robot_namespace.toStdString()+"/project11/send_command",1);
+    if (robot_namespace != robot_namespace_)
+    {
+        ros::NodeHandle nh;
+        m_mission_status_subscriber = nh.subscribe("/"+robot_namespace.toStdString()+"/project11/status/mission_manager" , 1, &MissionManager::missionStatusCallback, this);
+        m_send_command_publisher = nh.advertise<std_msgs::String>("/"+robot_namespace.toStdString()+"/project11/send_command",1);
 
-  send_avoidance_costmap_publisher_ = nh.advertise<project11_nav_msgs::GeoOccupancyVectorMap>("/"+robot_namespace.toStdString()+"/project11/avoidance_map", 1, true);
+        send_avoidance_costmap_publisher_ = nh.advertise<project11_nav_msgs::GeoOccupancyVectorMap>("/"+robot_namespace.toStdString()+"/project11/avoidance_map", 1, true);
+        robot_namespace_ = robot_namespace;
+    }
 }
 
 void MissionManager::updateMissionStatus(const QString& status)

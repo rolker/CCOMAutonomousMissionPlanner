@@ -54,6 +54,7 @@ private:
   ros::Duration max_green_duration_ = ros::Duration(2.0);
   ros::Duration max_yellow_duration_ = ros::Duration(5.0);
 
+  QString robot_namespace_;
 };
 
 #endif

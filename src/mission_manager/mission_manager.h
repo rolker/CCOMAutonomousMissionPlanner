@@ -66,6 +66,8 @@ private:
   ros::Publisher m_send_command_publisher;
   ros::Publisher send_avoidance_costmap_publisher_;
 
+  QString robot_namespace_;
+
 
 };
 

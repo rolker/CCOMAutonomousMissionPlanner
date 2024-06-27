@@ -54,9 +54,13 @@ void HelmManager::on_timeLatencyConfigPushButton_clicked(bool checked)
 void HelmManager::updateRobotNamespace(QString robot_namespace)
 {
   ROS_DEBUG_STREAM("updateRobotNamespace: " << robot_namespace.toStdString());
-  ros::NodeHandle nh;
-  m_heartbeat_subscriber = nh.subscribe("/"+robot_namespace.toStdString()+"/project11/heartbeat" , 1, &HelmManager::heartbeatCallback, this);
-  m_send_command_publisher = nh.advertise<std_msgs::String>("/"+robot_namespace.toStdString()+"/project11/send_command",1);
+  if(robot_namespace != robot_namespace_)
+  {
+    ros::NodeHandle nh;
+    m_heartbeat_subscriber = nh.subscribe("/"+robot_namespace.toStdString()+"/project11/heartbeat" , 1, &HelmManager::heartbeatCallback, this);
+    m_send_command_publisher = nh.advertise<std_msgs::String>("/"+robot_namespace.toStdString()+"/project11/send_command",1);
+    robot_namespace_ = robot_namespace;
+  }
 }
 
 void HelmManager::sendPilotingModeRequest(QString piloting_mode)
