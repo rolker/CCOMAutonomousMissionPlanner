@@ -58,20 +58,20 @@ protected:
 
 private:
     enum class MouseMode {pan, addWaypoint, addTrackline, addSurveyPattern, addSurveyArea, addSearchPattern, addAvoidArea};
-    QStatusBar * statusBar;
-    QLabel * positionLabel;
-    QLabel * modeLabel;
+    QStatusBar * statusBar = nullptr;
+    QLabel * positionLabel = nullptr;
+    QLabel * modeLabel = nullptr;
     MouseMode mouseMode;
-    AutonomousVehicleProject *m_project;
-    TrackLine * currentTrackLine;
-    Waypoint * pendingTrackLineWaypoint;
-    SurveyPattern * pendingSurveyPattern;
-    SurveyArea * pendingSurveyArea;
-    AvoidArea * pendingAvoidArea;
+    AutonomousVehicleProject *m_project = nullptr;
+    TrackLine * currentTrackLine = nullptr;
+    Waypoint * pendingTrackLineWaypoint = nullptr;
+    SurveyPattern * pendingSurveyPattern = nullptr;
+    SurveyArea * pendingSurveyArea = nullptr;
+    AvoidArea * pendingAvoidArea = nullptr;
     SearchPattern * pendingSearchPattern = nullptr;
-    Waypoint * pendingSurveyAreaWaypoint;
-    Waypoint * pendingAvoidAreaWaypoint;
-    MeasuringTool * measuringTool;
+    Waypoint * pendingSurveyAreaWaypoint = nullptr;
+    Waypoint * pendingAvoidAreaWaypoint = nullptr;
+    MeasuringTool * measuringTool = nullptr;
 
     QGeoCoordinate m_contextMenuLocation;
 
