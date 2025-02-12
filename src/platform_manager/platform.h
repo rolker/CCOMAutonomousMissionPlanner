@@ -32,6 +32,8 @@ public:
   MissionManager* missionManager() const;
   HelmManager* helmManager() const;
 
+  void onNodeUpdated() override;
+
 signals:
   void platformPosition(Platform* platform, QGeoCoordinate position);
 

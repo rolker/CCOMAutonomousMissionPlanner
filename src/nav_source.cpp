@@ -20,6 +20,10 @@ void NavSource::trySubscribe()
 {
   if(node_)
   {
+    RCLCPP_INFO_STREAM(node_->get_logger(), "NavSource::trySubscribe");
+    RCLCPP_INFO_STREAM(node_->get_logger(), "pending_position_topic_: " << pending_position_topic_);
+    RCLCPP_INFO_STREAM(node_->get_logger(), "pending_orientation_topic_: " << pending_orientation_topic_);
+    RCLCPP_INFO_STREAM(node_->get_logger(), "pending_velocity_topic_: " << pending_velocity_topic_);
     auto topics = node_->get_topic_names_and_types();
     for(auto topic: topics)
     {
@@ -27,14 +31,16 @@ void NavSource::trySubscribe()
       
       if(!pending_position_topic_.empty() && name == pending_position_topic_)
       {
+        RCLCPP_INFO_STREAM(node_->get_logger(), "  Checking " << topic.first);
         for (auto topic_type: topic.second)
         {
-          if(topic_type == "sensor_msgs/NavSatFix")
+          RCLCPP_INFO_STREAM(node_->get_logger(), "   type: " << topic_type);
+          if(topic_type == "sensor_msgs/msg/NavSatFix")
           {
             position_subscription_ = node_->create_subscription<sensor_msgs::msg::NavSatFix>(name, 1, std::bind(&NavSource::positionCallback, this, std::placeholders::_1));
             pending_position_topic_.clear();
           }
-          else if(topic_type == "geographic_msgs/GeoPoseStamped")
+          else if(topic_type == "geographic_msgs/msg/GeoPoseStamped")
           {
             geo_pose_subscription_ = node_->create_subscription<geographic_msgs::msg::GeoPoseStamped>(name, 1, std::bind(&NavSource::geoPoseCallback, this, std::placeholders::_1));
             pending_position_topic_.clear();
@@ -46,7 +52,7 @@ void NavSource::trySubscribe()
       {
         for (auto topic_type: topic.second)
         {
-          if(topic_type == "sensor_msgs/Imu")
+          if(topic_type == "sensor_msgs/msg/Imu")
           {
             orientation_subscription_ = node_->create_subscription<sensor_msgs::msg::Imu>(name, 1, std::bind(&NavSource::orientationCallback, this, std::placeholders::_1));
             pending_orientation_topic_.clear();
@@ -58,7 +64,7 @@ void NavSource::trySubscribe()
       {
         for (auto topic_type: topic.second)
         {
-          if(topic_type == "geometry_msgs/TwistWithCovarianceStamped")
+          if(topic_type == "geometry_msgs/msg/TwistWithCovarianceStamped")
           {
             velocity_subscription_ = node_->create_subscription<geometry_msgs::msg::TwistWithCovarianceStamped>(name, 1, std::bind(&NavSource::velocityCallback, this, std::placeholders::_1));
             pending_velocity_topic_.clear();

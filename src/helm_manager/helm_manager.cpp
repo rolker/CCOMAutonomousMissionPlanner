@@ -143,14 +143,14 @@ void HelmManager::updatePilotingMode(QString const &piloting_mode)
 
 void HelmManager::updateHeartbeatTimes(double last_heartbeat_timestamp, double last_heartbeat_receive_time)
 {
-  last_heartbeat_timestamp_ = rclcpp::Time() + rclcpp::Duration::from_seconds(last_heartbeat_timestamp);
-  last_heartbeat_receive_time_ = rclcpp::Time() + rclcpp::Duration::from_seconds(last_heartbeat_receive_time);
+  last_heartbeat_timestamp_ = rclcpp::Time(0, 0, node_->get_clock()->get_clock_type()) + rclcpp::Duration::from_seconds(last_heartbeat_timestamp);
+  last_heartbeat_receive_time_ = rclcpp::Time(0, 0, node_->get_clock()->get_clock_type()) + rclcpp::Duration::from_seconds(last_heartbeat_receive_time);
 }
 
 void HelmManager::watchdogUpdate()
 {
   auto now = node_->get_clock()->now();
-  if(last_heartbeat_timestamp_.nanoseconds() > 0)
+  if(last_heartbeat_timestamp_.seconds() > 0.0)
   {
     auto diff = now-last_heartbeat_timestamp_;
 

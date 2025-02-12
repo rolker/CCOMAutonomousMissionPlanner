@@ -13,11 +13,12 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.setStyleSheet("QSplitter::handle{background: #8080A0;}");
     w.show();
+
+    auto args = rclcpp::remove_ros_arguments(argc, argv);    
     
-    
-    for(int i = 1; i < argc; i++)
+    for(std::size_t i = 1; i < args.size(); i++)
     {
-        QString arg(argv[i]);
+        QString arg(args[i].c_str());
         if(arg.endsWith(".json", Qt::CaseInsensitive))
             //w.open(arg);
             QMetaObject::invokeMethod(&w, "open", Qt::QueuedConnection, Q_ARG(QString, arg));

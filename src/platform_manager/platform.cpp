@@ -107,6 +107,18 @@ void Platform::update(const project11_msgs::msg::Platform& platform)
   for(auto ns: platform.nav_sources)
     if(m_nav_sources.find(ns.name) == m_nav_sources.end())
     {
+      if(platformNamespace.empty())
+        platformNamespace = "/";
+      if(platformNamespace[0] != '/')
+        platformNamespace = "/" + platformNamespace;
+      if(platformNamespace.back() != '/')
+        platformNamespace = platformNamespace + "/";
+      if(!ns.position_topic.empty() && ns.position_topic[0] != '/')
+        ns.position_topic = platformNamespace + ns.position_topic;
+      if(!ns.orientation_topic.empty() && ns.orientation_topic[0] != '/')
+        ns.orientation_topic = platformNamespace + ns.orientation_topic;
+      if(!ns.velocity_topic.empty() && ns.velocity_topic[0] != '/')
+        ns.velocity_topic = platformNamespace + ns.velocity_topic;
       m_nav_sources[ns.name] = new NavSource(ns, this, this);
       m_nav_sources[ns.name]->setHistoryDuration(7200);
       connect(m_nav_sources[ns.name], &NavSource::beforeNavUpdate, this, &Platform::aboutToUpdateNav);
@@ -114,6 +126,7 @@ void Platform::update(const project11_msgs::msg::Platform& platform)
       if(m_nav_sources.size() == 1)
         connect(m_nav_sources[ns.name], &NavSource::sog, this, &Platform::updateSog);
       m_nav_sources[ns.name]->setColor(m_color);
+      m_nav_sources[ns.name]->nodeStarted(node_, transform_buffer_);
     }
 
 }
@@ -191,4 +204,12 @@ void Platform::setColor(QColor color)
   dim.setAlphaF(color.alphaF()*.8);
   for(auto nav: m_nav_sources)
     nav.second->setColor(dim);
+}
+
+void Platform::onNodeUpdated()
+{
+  for(auto ns: m_nav_sources)
+    ns.second->nodeStarted(node_, transform_buffer_);
+  m_ui->helmManager->setNode(node_);
+  m_ui->missionManager->nodeStarted(node_, transform_buffer_);
 }

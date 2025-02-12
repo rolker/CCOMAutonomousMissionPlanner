@@ -35,6 +35,7 @@ void PlatformManager::updatePlatform(project11_msgs::msg::Platform platform)
   if(m_platforms.find(platform.name) == m_platforms.end())
   {
     m_platforms[platform.name] = new Platform(this, m_background);
+    m_platforms[platform.name]->nodeStarted(node_, transform_buffer_);
     m_ui->tabWidget->addTab(m_platforms[platform.name], platform.name.c_str());
   }
   m_platforms[platform.name]->update(platform);
